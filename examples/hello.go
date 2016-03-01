@@ -1,7 +1,7 @@
 package main
 
 import (
-    "github.com/hoisie/web"
+    "github.com/FactomProject/web"
 )
 
 func hello(val string) string { return "hello " + val }
