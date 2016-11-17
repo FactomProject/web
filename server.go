@@ -202,7 +202,8 @@ func (s *Server) safelyCall(function reflect.Value, args []reflect.Value) (resp 
             } else {
                 e = err
                 resp = nil
-                s.Logger.Println("Handler crashed with error", err)
+				_, file, line, _ := runtime.Caller(5)
+				s.Logger.Printf("Handler crashed at %v:%v with error %v\n", file, line, err)
                 for i := 1; ; i += 1 {
                     _, file, line, ok := runtime.Caller(i)
                     if !ok {
