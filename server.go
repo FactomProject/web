@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/tls"
 	"fmt"
-	"golang.org/x/net/websocket"
 	"log"
 	"net"
 	"net/http"
@@ -17,6 +16,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rs/cors"
+	"golang.org/x/net/websocket"
 )
 
 // ServerConfig is configuration for server objects.
@@ -27,6 +29,7 @@ type ServerConfig struct {
 	CookieSecret string
 	RecoverPanic bool
 	Profiler     bool
+	CorsDomains  []string
 }
 
 // Server represents a web.go server.
@@ -143,8 +146,8 @@ func (s *Server) Run(addr string) {
 		mux.Handle("/debug/pprof/heap", pprof.Handler("heap"))
 		mux.Handle("/debug/pprof/symbol", http.HandlerFunc(pprof.Symbol))
 	}
-	mux.Handle("/", s)
 
+	s.handleRoot(mux)
 	s.Logger.Printf("web.go serving %s\n", addr)
 
 	l, err := net.Listen("tcp", addr)
@@ -154,6 +157,19 @@ func (s *Server) Run(addr string) {
 	s.l = l
 	err = http.Serve(s.l, mux)
 	s.l.Close()
+}
+
+func (s *Server) handleRoot(mux *http.ServeMux) {
+
+	if len(s.Config.CorsDomains) > 0 {
+		c := cors.New(cors.Options{
+			AllowedOrigins: s.Config.CorsDomains,
+		})
+		mux.Handle("/", c.Handler(s))
+	} else {
+		mux.Handle("/", s)
+	}
+
 }
 
 // RunFcgi starts the web application and serves FastCGI requests for s.
@@ -174,7 +190,8 @@ func (s *Server) RunScgi(addr string) {
 func (s *Server) RunTLS(addr string, config *tls.Config) error {
 	s.initServer()
 	mux := http.NewServeMux()
-	mux.Handle("/", s)
+	s.handleRoot(mux)
+
 	l, err := tls.Listen("tcp", addr, config)
 	if err != nil {
 		log.Fatal("Listen:", err)
