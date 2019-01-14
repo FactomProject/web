@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"crypto/tls"
 	"fmt"
-	"github.com/rs/cors"
-	"golang.org/x/net/websocket"
 	"log"
 	"net"
 	"net/http"
@@ -18,6 +16,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rs/cors"
+	"golang.org/x/net/websocket"
 )
 
 // ServerConfig is configuration for server objects.
@@ -146,7 +147,6 @@ func (s *Server) Run(addr string) {
 		mux.Handle("/debug/pprof/symbol", http.HandlerFunc(pprof.Symbol))
 	}
 	s.handleRoot(mux)
-
 	s.Logger.Printf("web.go serving %s\n", addr)
 
 	l, err := net.Listen("tcp", addr)
@@ -159,6 +159,7 @@ func (s *Server) Run(addr string) {
 }
 
 func (s *Server) handleRoot(mux *http.ServeMux) {
+
 	if len(s.Config.CorsDomains) > 0 {
 		c := cors.New(cors.Options{
 			AllowedOrigins: s.Config.CorsDomains,
@@ -167,6 +168,7 @@ func (s *Server) handleRoot(mux *http.ServeMux) {
 	} else {
 		mux.Handle("/", s)
 	}
+
 }
 
 // RunFcgi starts the web application and serves FastCGI requests for s.
