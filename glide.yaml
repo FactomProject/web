@@ -1,5 +1,0 @@
-package: github.com/FactomProject/web
-import:
-- package: golang.org/x/net
-  subpackages:
-  - websocket
