@@ -1,0 +1,6 @@
+github.com/FactomProject/web v0.1.0 h1:M136UkW3h/V8hH7h+s7qqm3GGSrKGKyXi6p94Z/AgPw=
+github.com/FactomProject/web v0.1.0/go.mod h1:wiLhlN8amF4dalkSy+u75C3xsXaesSHy2cph6b/8PrI=
+github.com/rs/cors v1.7.0 h1:+88SsELBHx5r+hZ8TCkggzSstaWNbDvThkVK8H6f9ik=
+github.com/rs/cors v1.7.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=
+golang.org/x/net v0.0.0-20161116075034-4971afdc2f16 h1:x2xFZACPoDbV+g+48fDH/4EQTTNPgHTRko7g0JQiZws=
+golang.org/x/net v0.0.0-20161116075034-4971afdc2f16/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
